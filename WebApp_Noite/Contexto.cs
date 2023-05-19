@@ -7,6 +7,6 @@ namespace WebApp_Noite
         public Contexto (DbContextOptions<Contexto> opt)
             :base(opt) { }
 
-        public DbSet<Categorias> Categorias { get; set; }
+        public DbSet<Categorias> Categorias { get; set; }  
     }
 }
