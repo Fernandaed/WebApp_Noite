@@ -25,16 +25,16 @@ namespace WebApp_Noite.Controllers
                 switch (filtro) 
                 {
                     case "id":
-                        return View(db_produto.Where(a=>a.Id.ToString() == busca).ToList());
+                        return View(db.Produtos.Where(a=>a.Id.ToString() == busca).ToList());
                         break;
                     case "nome":
-                        return View(db_produto.Where(a => a.Nome.Contains(busca)).ToList());
+                        return View(db.Produtos.Where(a => a.Descricao.Contains(busca)).ToList());
                         break;
                     case "qtd":
-                        return View(db_produto.Where(a => a.QtdEstoque.ToString() == busca).ToList());
+                        return View(db.Produtos.Where(a => a.Valor.ToString() == busca).ToList());
                         break;
                     default:
-                        return View(db_produto.Where(a => a.Id.ToString() == busca || a.Nome.Contains(busca) || a.QtdEstoque.ToString() == busca).ToList());
+                        return View(db.Produtos.Where(a => a.Id.ToString() == busca || a.Descricao.Contains(busca) || a.Valor.ToString() == busca).ToList());
                         break;
                 }
             }
