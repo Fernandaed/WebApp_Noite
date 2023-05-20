@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApp_Noite.Models;
+using WebApp_Noite.Tabelas;
 
 namespace WebApp_Noite.Controllers
 {
@@ -7,19 +8,57 @@ namespace WebApp_Noite.Controllers
     {
         public static List<ProdutoModel> db_produto = new List<ProdutoModel>();
 
-        public IActionResult Lista()
+        private Contexto db;
+        public ProdutoController(Contexto contexto) 
         {
-            return View( db_produto );
+            db = contexto;
+        }
+
+        public IActionResult Lista(string filtro, string busca)
+        {   
+            if(string.IsNullOrEmpty(busca))
+            {
+                return View(db_produto);
+            }
+            else
+            {
+                switch (filtro) 
+                {
+                    case "id":
+                        return View(db_produto.Where(a=>a.Id.ToString() == busca).ToList());
+                        break;
+                    case "nome":
+                        return View(db_produto.Where(a => a.Nome.Contains(busca)).ToList());
+                        break;
+                    case "qtd":
+                        return View(db_produto.Where(a => a.QtdEstoque.ToString() == busca).ToList());
+                        break;
+                    default:
+                        return View(db_produto.Where(a => a.Id.ToString() == busca || a.Nome.Contains(busca) || a.QtdEstoque.ToString() == busca).ToList());
+                        break;
+                }
+            }
+            
         }
 
         public IActionResult Cadastrar()
         {
             ProdutoModel model = new ProdutoModel();
+            model.TodasCategorias = db.Categorias.ToList();
             return View(model);
         }
 
         public IActionResult SalvarDados(ProdutoModel produto)
         {
+            Produtos novoProduto = new Produtos();
+            novoProduto.Descricao = produto.Nome;
+            novoProduto.Valor = produto.QtdEstoque;
+            novoProduto.Ativo = true;
+            novoProduto.CategoriaId = produto.CategoriaId;
+
+            db.Produtos.Add(novoProduto);
+            db.SaveChanges();
+
             if(produto.Id == 0)
             {
                 Random rand = new Random();

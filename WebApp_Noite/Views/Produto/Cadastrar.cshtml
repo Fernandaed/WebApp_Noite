@@ -19,6 +19,15 @@
                     <input type="number" name="QtdEstoque" class="form-control" />
                     <br />
 
+                    <select name="CategoriasId" class="form-control">
+                        @foreach (var categorias in Model.TodasCategorias)
+                        {
+                            <option value ="@categorias.Id">
+                                @categorias.Nome
+                            </option>
+                        }
+                    </select>
+
                     <button type="submit" class="btn btn-info">
                         Salvar Produto
                     </button>
